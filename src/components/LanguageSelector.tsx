@@ -9,7 +9,7 @@ import {
   SelectChangeEvent,
 } from '@mui/material';
 import { useRouter, usePathname } from 'next/navigation';
-import { locales, localeNames, localeConfig } from '@/lib/i18n';
+import { locales, localeNames } from '@/lib/i18n';
 
 export default function LanguageSelector() {
   const router = useRouter();
