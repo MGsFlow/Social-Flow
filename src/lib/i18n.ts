@@ -25,8 +25,6 @@ export const localeConfig = {
 
 // 언어별 메타데이터
 export const getLocaleMetadata = (locale: Locale) => {
-  const config = localeConfig[locale];
-  
   const metadata = {
     ko: {
       title: 'SocialFlow | 차세대 소셜 광고 플랫폼',
