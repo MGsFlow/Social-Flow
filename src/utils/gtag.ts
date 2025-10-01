@@ -2,15 +2,15 @@
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
 
 export const GA_TRACKING_ID = process.env.NEXT_PUBLIC_GA_ID || 'G-XXXXXXXXXX';
 
 // GA4 이벤트 추적
-export const trackEvent = (action: string, parameters?: Record<string, any>) => {
+export const trackEvent = (action: string, parameters?: Record<string, unknown>) => {
   if (typeof window !== 'undefined' && window.gtag) {
     window.gtag('event', action, {
       event_category: 'engagement',
@@ -20,7 +20,7 @@ export const trackEvent = (action: string, parameters?: Record<string, any>) => 
 };
 
 // 광고 클릭 추적
-export const trackAdClick = (adId: string, adData: any) => {
+export const trackAdClick = (adId: string, adData: { brand?: string; cta?: string }) => {
   trackEvent('ad_click', {
     ad_id: adId,
     ad_brand: adData.brand,
@@ -31,7 +31,7 @@ export const trackAdClick = (adId: string, adData: any) => {
 };
 
 // 광고 조회 추적
-export const trackAdView = (adId: string, adData: any) => {
+export const trackAdView = (adId: string, adData: { brand?: string }) => {
   trackEvent('ad_view', {
     ad_id: adId,
     ad_brand: adData.brand,
