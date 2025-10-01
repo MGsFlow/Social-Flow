@@ -4,7 +4,7 @@ import React from 'react';
 
 interface StructuredDataProps {
   type: 'WebSite' | 'Organization' | 'WebPage' | 'SocialMediaPosting';
-  data: any;
+  data: Record<string, unknown>;
 }
 
 export default function StructuredData({ type, data }: StructuredDataProps) {
