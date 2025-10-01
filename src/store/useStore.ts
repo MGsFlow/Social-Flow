@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
 
 export interface Post {
   id: string;
@@ -33,11 +32,11 @@ export interface AppState {
   likePost: (postId: string) => void;
   setLoading: (loading: boolean) => void;
   setHydrated: (hydrated: boolean) => void;
-  trackAdClick: (adId: string, adData: any) => void;
-  trackAdView: (adId: string, adData: any) => void;
+  trackAdClick: (adId: string, adData: Post['adData']) => void;
+  trackAdView: (adId: string, adData: Post['adData']) => void;
 }
 
-export const useStore = create<AppState>((set, get) => ({
+export const useStore = create<AppState>((set) => ({
   posts: [],
   currentUser: {
     username: 'user123',
@@ -70,23 +69,23 @@ export const useStore = create<AppState>((set, get) => ({
   
   trackAdClick: (adId, adData) => {
     // GA4 이벤트 추적
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'ad_click', {
+    if (typeof window !== 'undefined' && (window as Window & { gtag?: (...args: unknown[]) => void }).gtag) {
+      (window as Window & { gtag: (...args: unknown[]) => void }).gtag('event', 'ad_click', {
         ad_id: adId,
-        ad_brand: adData.brand,
-        ad_cta: adData.cta,
+        ad_brand: adData?.brand,
+        ad_cta: adData?.cta,
         event_category: 'advertising',
         event_label: 'ad_click'
       });
     }
     
     // DataLayer에 이벤트 추가
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
+    if (typeof window !== 'undefined' && (window as Window & { dataLayer?: unknown[] }).dataLayer) {
+      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
         event: 'ad_click',
         ad_id: adId,
-        ad_brand: adData.brand,
-        ad_cta: adData.cta,
+        ad_brand: adData?.brand,
+        ad_cta: adData?.cta,
         timestamp: new Date().toISOString()
       });
     }
@@ -94,21 +93,21 @@ export const useStore = create<AppState>((set, get) => ({
   
   trackAdView: (adId, adData) => {
     // GA4 이벤트 추적
-    if (typeof window !== 'undefined' && (window as any).gtag) {
-      (window as any).gtag('event', 'ad_view', {
+    if (typeof window !== 'undefined' && (window as Window & { gtag?: (...args: unknown[]) => void }).gtag) {
+      (window as Window & { gtag: (...args: unknown[]) => void }).gtag('event', 'ad_view', {
         ad_id: adId,
-        ad_brand: adData.brand,
+        ad_brand: adData?.brand,
         event_category: 'advertising',
         event_label: 'ad_view'
       });
     }
     
     // DataLayer에 이벤트 추가
-    if (typeof window !== 'undefined' && (window as any).dataLayer) {
-      (window as any).dataLayer.push({
+    if (typeof window !== 'undefined' && (window as Window & { dataLayer?: unknown[] }).dataLayer) {
+      (window as Window & { dataLayer: unknown[] }).dataLayer.push({
         event: 'ad_view',
         ad_id: adId,
-        ad_brand: adData.brand,
+        ad_brand: adData?.brand,
         timestamp: new Date().toISOString()
       });
     }
