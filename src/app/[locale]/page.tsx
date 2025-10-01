@@ -5,6 +5,6 @@ type Props = {
 };
 
 export default async function LocalePage({ params }: Props) {
-  const { locale } = await params;
+  await params; // params를 사용하여 경고 제거
   return <Feed />;
 }
